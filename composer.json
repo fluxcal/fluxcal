@@ -9,8 +9,10 @@
         }
     ],
     "require": {},
-    "require-dev": {},
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
     "autoload": {
-        "psr-0": {"Symfony\\": "src/"}
+        "psr-0": {"FluxCal\\": "src/"}
     }
 }
