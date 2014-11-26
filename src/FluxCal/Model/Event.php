@@ -7,7 +7,7 @@ namespace FluxCal\Model;
  *
  * @author Timon F <dev@timonf.de>
  */
-class Event
+class Event implements EventInterface
 {
     /**
      * @var \DateTime
