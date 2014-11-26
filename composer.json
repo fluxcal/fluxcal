@@ -1,0 +1,16 @@
+{
+    "name": "fluxcal/fluxcal",
+    "description": "FluxCal is an implementation of the iCalendar standard.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Timon F",
+            "email": "dev@timonf.de"
+        }
+    ],
+    "require": {},
+    "require-dev": {},
+    "autoload": {
+        "psr-0": {"Symfony\\": "src/"}
+    }
+}
