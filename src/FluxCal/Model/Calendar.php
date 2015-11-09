@@ -2,13 +2,17 @@
 
 namespace FluxCal\Model;
 
+use Iterator;
+
 /**
  * Class Calendar
  *
  * @author Timon F <dev@timonf.de>
  */
-class Calendar implements CalendarInterface
+class Calendar implements CalendarInterface, Iterator
 {
+    protected $position = 0;
+
     /**
      * @var EventInterface[]
      */
@@ -18,8 +22,6 @@ class Calendar implements CalendarInterface
      * Adds an event of which implements EventInterface.
      *
      * @param EventInterface $event
-     *
-     * @author Timon F <dev@timonf.de>
      */
     public function addEvent(EventInterface $event)
     {
@@ -36,11 +38,51 @@ class Calendar implements CalendarInterface
 
     /**
      * Remove all events.
-     *
-     * @author Timon F <dev@timonf.de>
      */
     public function removeEvents()
     {
         $this->events = [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rewind()
+    {
+        $this->position = 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Event
+     */
+    public function current()
+    {
+        $this->events[$this->position];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function key()
+    {
+        return $this->position;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function next()
+    {
+        ++$this->position;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function valid()
+    {
+        return array_key_exists($this->position, $this->events);
     }
 }

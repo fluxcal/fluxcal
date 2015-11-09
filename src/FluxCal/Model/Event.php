@@ -2,6 +2,9 @@
 
 namespace FluxCal\Model;
 
+use DateTime;
+use DateInterval;
+
 /**
  * Class Event
  *
@@ -10,9 +13,29 @@ namespace FluxCal\Model;
 class Event implements EventInterface
 {
     /**
+     * @var string
+     */
+    protected $uniqueIdentifier;
+
+    /**
      * @var \DateTime
      */
-    protected $endDateTime;
+    protected $dateTimeStart;
+
+    /**
+     * @var \DateTime
+     */
+    protected $dateTimeEnd;
+
+    /**
+     * @var int|DateInterval
+     */
+    protected $duration;
+
+    /**
+     * @var string
+     */
+    protected $summary;
 
     /**
      * @var string
@@ -20,35 +43,86 @@ class Event implements EventInterface
     protected $description;
 
     /**
-     * Setter for dateTime, will stored as endDateTime.
-     *
-     * @param \DateTime $dateTime
-     *
-     * @author Timon F <dev@timonf.de>
+     * {@inheritdoc}
      */
-    public function setDateTime(\DateTime $dateTime)
+    public function getUniqueIdentifier()
     {
-        $this->endDateTime = $dateTime;
+        return $this->uniqueIdentifier;
     }
 
     /**
-     * Getter for dateTime, will read from endDateTime.
-     *
-     * @return \DateTime
-     *
-     * @author Timon F <dev@timonf.de>
+     * @param string $uniqueIdentifier
      */
-    public function getDateTime()
+    public function setUniqueIdentifier($uniqueIdentifier)
     {
-        return $this->endDateTime;
+        $this->uniqueIdentifier = $uniqueIdentifier;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDateTimeStart()
+    {
+        return $this->dateTimeStart;
+    }
+
+    /**
+     * Setter for dateTime, will stored as dateTimeStart.
+     *
+     * @param \DateTime $dateTime
+     */
+    public function setDateTimeStart(\DateTime $dateTime)
+    {
+        $this->dateTimeStart = $dateTime;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDateTimeEnd()
+    {
+        return $this->dateTimeEnd;
+    }
+
+    /**
+     * Setter for dateTime, will stored as dateTimeEnd.
+     *
+     * @param \DateTime $dateTime
+     */
+    public function setDateTimeEnd(\DateTime $dateTime)
+    {
+        $this->dateTimeEnd = $dateTime;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDuration()
+    {
+        return $this->duration;
+    }
+
+    /**
+     * @param DateInterval|int $duration
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription()
+    {
+        return $this->description;
     }
 
     /**
      * Setter for event's description.
      *
      * @param string $description
-     *
-     * @author Timon F <dev@timonf.de>
      */
     public function setDescription($description)
     {
@@ -56,14 +130,19 @@ class Event implements EventInterface
     }
 
     /**
-     * Getter for event's description.
-     *
      * @return string
-     *
-     * @author Timon F <dev@timonf.de>
      */
-    public function getDescription()
+    public function getSummary()
     {
-        return $this->description;
+        return $this->summary;
     }
+
+    /**
+     * @param string $summary
+     */
+    public function setSummary($summary)
+    {
+        $this->summary = $summary;
+    }
+
 }

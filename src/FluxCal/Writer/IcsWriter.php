@@ -2,6 +2,8 @@
 
 namespace FluxCal\Writer;
 
+use DateTime;
+use DateInterval;
 use FluxCal\Model\CalendarInterface;
 use FluxCal\Model\Event;
 use FluxCal\Model\EventInterface;
@@ -19,8 +21,11 @@ class IcsWriter implements WriterInterface, CalendarAwareInterface
 
     const VERSION = '2.0';
 
+    const INTERVAL_ISO8601 = 'P%yY%mM%dDT%hH%iM%sS';
+    const ICS_DATETIME_FORMAT = 'Ymd\THis';
+
     const TYPE_CALENDAR = 'VCALENDAR';
-    const TYPE_EVENT = 'VCALENDAR';
+    const TYPE_EVENT = 'VEVENT';
 
     /**
      * @var CalendarInterface
@@ -120,7 +125,21 @@ class IcsWriter implements WriterInterface, CalendarAwareInterface
         $iCal = $this->writeOpenSection(self::TYPE_EVENT);
         if ($event instanceof Event) {
             $iCal .= $this->writeAttribute('description', $event->getDescription());
-            // todo: date time conversion (\DateTime to ics/rfc standard)
+            $iCal .= $this->writeAttribute('summary', $event->getSummary());
+
+            if ($event->getDateTimeStart() instanceof DateTime) {
+                $iCal .= $this->writeAttribute('dtstart', $event->getDateTimeEnd()->format(self::ICS_DATETIME_FORMAT));
+            }
+
+            if ($event->getDateTimeEnd() instanceof DateTime) {
+                $iCal .= $this->writeAttribute('dtend', $event->getDateTimeStart()->format(self::ICS_DATETIME_FORMAT));
+            }
+
+            if ($event->getDuration() instanceof DateInterval) {
+                $iCal .= $this->writeAttribute('duration', $this->formatInterval($event->getDuration()));
+            } elseif(intval($event->getDuration())) {
+                $iCal .= $this->writeAttribute('duration', sprintf('P%sS', (int)$event->getDuration()));
+            }
         }
         $iCal .= $this->writeCloseSection(self::TYPE_EVENT);
         return $iCal;
@@ -138,4 +157,47 @@ class IcsWriter implements WriterInterface, CalendarAwareInterface
 
         return $iCal;
     }
+
+    /**
+     * Formating the interval like ISO 8601 (PnYnMnDTnHnMnS)
+     *
+     * @param DateInterval $dateInterval
+     *
+     * @return string
+     */
+    protected static function formatInterval(DateInterval $dateInterval)
+    {
+        $sReturn = 'P';
+
+        if($dateInterval->y){
+            $sReturn .= $dateInterval->y . 'Y';
+        }
+
+        if($dateInterval->m){
+            $sReturn .= $dateInterval->m . 'M';
+        }
+
+        if($dateInterval->d){
+            $sReturn .= $dateInterval->d . 'D';
+        }
+
+        if($dateInterval->h || $dateInterval->i || $dateInterval->s){
+            $sReturn .= 'T';
+
+            if($dateInterval->h){
+                $sReturn .= $dateInterval->h . 'H';
+            }
+
+            if($dateInterval->i){
+                $sReturn .= $dateInterval->i . 'M';
+            }
+
+            if($dateInterval->s){
+                $sReturn .= $dateInterval->s . 'S';
+            }
+        }
+
+        return $sReturn;
+    }
+
 }
