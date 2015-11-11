@@ -191,7 +191,7 @@ class IcsWriter implements WriterInterface, CalendarAwareInterface
 
         if ($event->getDuration() instanceof DateInterval) {
             $iCal .= $this->writeAttribute('duration', $this->formatInterval($event->getDuration()));
-        } elseif(intval($event->getDuration())) {
+        } elseif(is_numeric($event->getDuration())) {
             $iCal .= $this->writeAttribute('duration', sprintf('P%sS', (int)$event->getDuration()));
         }
 
