@@ -263,7 +263,7 @@ class IcsWriter implements WriterInterface, CalendarAwareInterface
      */
     protected static function escapeString($value)
     {
-        return str_replace([':', ';', ','], ['\\:', '\\;', '\\,'], $value);
+        return str_replace([';', ','], ['\\;', '\\,'], $value);
     }
 
 }
